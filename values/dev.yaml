@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: 531546894109.dkr.ecr.ap-southeast-1.amazonaws.com/spinnaker
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
