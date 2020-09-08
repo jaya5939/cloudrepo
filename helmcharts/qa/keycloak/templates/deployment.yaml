@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: qa
+  labels:
+    name: keycloak
+spec:
+{{- if not .Values.keycloak.autoscaling.enabled }}
+  replicas: {{ .Values.keycloak.replicaCount }}
+{{- end }}
+  selector:
+   matchLabels:
+     name: keycloak
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        name: keycloak
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.keycloak.image.repository }}:{{ .Values.keycloak.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
+          env:
+            - name: KEYCLOAK_USER
+              value: {{ .Values.keycloak.username }}
+            - name: KEYCLOAK_PASSWORD
+              value: {{ .Values.keycloak.password }}
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+#            - name: DB_SCHEMA
+#              value: keycloak
+#            - name: DB_VENDOR
+#              value: {{ .Values.keycloak.persistence.dbVendor | quote }}
+#            - name: DB_DATABASE
+#              value: {{ .Values.keycloak.persistence.dbName | quote }}
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secret
+#                  key: dbname
+#            - name: DB_ADDR
+#              value: {{ .Values.keycloak.persistence.dbHost | quote }}
+#            - name: DB_PORT
+#              value: {{ .Values.keycloak.persistence.dbPort | quote }}
+#            - name: DB_USER
+#              value: {{ .Values.keycloak.persistence.dbUser | quote }}
+#              valueFrom:
+#                secretKeyRef:
+#                  name: database-secret
+#                  key: dbuser
+#            - name: DB_PASSWORD
+#              value: {{ .Values.keycloak.persistence.dbPassword | quote }}
+#             valueFrom:
+#                secretKeyRef:
+#                  name: database-secret
+#                  key: dbpassword
+          {{- with .Values.keycloak.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1         
+#          livenessProbe:
+#            {{- tpl . $ | nindent 12 }}
+#          {{- end }}
+#          {{- with .Values.keycloak.readinessProbe }}
+#          readinessProbe:
+#            {{- tpl . $ | nindent 12 }}
+#          {{- end }}     
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+            {{- with .Values.nodeSelector }}
+        nodeSelector:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.affinity }}
+        affinity:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.tolerations }}
+        tolerations:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}

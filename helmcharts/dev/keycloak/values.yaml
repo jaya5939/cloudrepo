@@ -1,0 +1,61 @@
+keycloak:
+  replicaCount: 1 
+  image:
+    repository: jboss/keycloak
+    pullPolicy: Always
+    tag: 7.0.0
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    annotations: 
+    name:  
+  service:
+    annotations: 
+      kubernetes.io/ingress.class: alb
+    labels: {}
+    type: ClusterIP
+    port: 80
+  PodAnnotations: 
+#       kubernetes.io/ingress.class: alb
+  username: "admin"
+  password: "admin"
+  proxyAddressForwarding: "true"
+  persistence:   
+    deployPostgres: false
+#    dbVendor: postgres
+#    dbName: smart_risk
+#    dbHost: smart-risk-dev.cewqmdlrwgkt.ap-southeast-1.rds.amazonaws.com
+#    dbPort: 5432
+#    dbUser: smartriskadmin
+#    dbPassword: CropIn#$123
+  extraEnv: |
+    - name: JGROUPS_DISCOVERY_PROTOCOL
+      value: dns.DNS_PING
+    - name: JGROUPS_DISCOVERY_PROPERTIES
+      value: 'dns_query={{ include "keycloak.serviceDnsName" . }}'
+    - name: CACHE_OWNERS_COUNT
+      value: "2"
+    - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+      value: "2"
+  podSecurityContext: {}
+  securityContext: {} 
+  ingress:
+    enabled: false
+    annotations: {}
+    hosts:
+      - host: chart-example.local 
+        paths: []
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
