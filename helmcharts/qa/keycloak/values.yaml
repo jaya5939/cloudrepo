@@ -1,9 +1,10 @@
 keycloak:
-  replicaCount: 1 
+  replicaCount: 1
   image:
     repository: jboss/keycloak
     pullPolicy: Always
     tag: 7.0.0
+
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: ""
@@ -16,7 +17,7 @@ keycloak:
     annotations: 
       kubernetes.io/ingress.class: alb
     labels: {}
-    type: ClusterIP
+    type: LoadBalancer
     port: 80
   PodAnnotations: 
 #       kubernetes.io/ingress.class: alb
@@ -25,21 +26,6 @@ keycloak:
   proxyAddressForwarding: "true"
   persistence:   
     deployPostgres: false
-#    dbVendor: postgres
-#    dbName: smart_risk
-#    dbHost: smart-risk-dev.cewqmdlrwgkt.ap-southeast-1.rds.amazonaws.com
-#    dbPort: 5432
-#    dbUser: smartriskadmin
-#    dbPassword: CropIn#$123
-  extraEnv: |
-    - name: JGROUPS_DISCOVERY_PROTOCOL
-      value: dns.DNS_PING
-    - name: JGROUPS_DISCOVERY_PROPERTIES
-      value: 'dns_query={{ include "keycloak.serviceDnsName" . }}'
-    - name: CACHE_OWNERS_COUNT
-      value: "2"
-    - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
-      value: "2"
   podSecurityContext: {}
   securityContext: {} 
   ingress:

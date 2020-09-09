@@ -11,21 +11,26 @@ keycloak:
 
   serviceAccount:
     create: true
-    annotations: 
+    annotations: {}
     name:  
   service:
-    annotations: 
-      kubernetes.io/ingress.class: alb
+    annotations: {}
     labels: {}
-    type: LoadBalancer
-    port: 80
+    type: ClusterIP
+    port: 8080
   PodAnnotations: 
 #       kubernetes.io/ingress.class: alb
   username: "admin"
   password: "admin"
   proxyAddressForwarding: "true"
-  persistence:   
-    deployPostgres: false
+#  persistence:   
+#    deployPostgres: false
+#    dbVendor: postgres
+#    dbName:
+#    dbHost: 
+#    dbPort: 5432
+#    dbUser: 
+#    dbPassword: 
   podSecurityContext: {}
   securityContext: {} 
   ingress:

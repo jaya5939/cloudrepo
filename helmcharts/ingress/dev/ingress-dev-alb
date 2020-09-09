@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
 #    alb.ingress.kubernetes.io/target-type: instance
-    alb.ingress.kubernetes.io/certificate-arn:  arn:aws:acm:us-east-1:531546894109:certificate/96482ba6-17bb-41c1-ace3-bc9af4cc4f7e
+    alb.ingress.kubernetes.io/certificate-arn:  arn:aws:acm:ap-southeast-1:531546894109:certificate/d5093d93-5204-49df-8ce9-e5cbf59bb9c2
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/attributes: deletion_protection.enabled=true
