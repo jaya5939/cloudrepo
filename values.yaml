@@ -1,10 +1,10 @@
 
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository:  531546894109.dkr.ecr.ap-southeast-1.amazonaws.com/demo-repo
   pullPolicy: Always
-  tag: 1
+  tag: 10
 
 service:
   type: LoadBalancer
