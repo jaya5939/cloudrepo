@@ -4,7 +4,7 @@ replicaCount: 2
 image:
   repository:  531546894109.dkr.ecr.ap-southeast-1.amazonaws.com/demo-repo
   pullPolicy: Always
-  tag: 10
+  tag: latest
 
 service:
   type: LoadBalancer
